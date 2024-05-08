@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from matplotlib.animation import FuncAnimation
 import math
-
+import random
 def run():
     def readfile():
         file = open("history.csv")
@@ -16,7 +16,7 @@ def run():
         while next_line != "":
             row = next_line.split(",")
             try:
-                tL.append(float(row[1])**(1/7))
+                tL.append(math.log(float(row[1])+1))
                 T.append(math.log(epoch+1))
                 epoch += 1
                 next_line = file.readline()
@@ -24,7 +24,7 @@ def run():
                 print(error)
                 break
 
-        print("finished reading data")
+        #print("finished reading data")
         return(T, tL)
 
 
@@ -36,23 +36,24 @@ def run():
     # creating the first plot and frame
     fig, ax = plt.subplots()
     global graph
-    graph = ax.plot(x,y,color = 'g')[0]
-    plt.ylim(0,max(y))
+    colour = (random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1))
+    graph = ax.plot(x,y,color=colour)[0]
+
     plt.xlabel("ln( epochs )")
-    plt.ylabel("Total Loss (MAE)")
+    plt.ylabel("ln(Total Loss (MAE))")
 
 
     # updates the data and graph
     def update(frame):
         x, y = readfile()
-        graph = ax.plot(x,y,color = 'g')[0]
+        graph = ax.plot(x,y,color=colour)[0]
 
         # creating a new graph or updating the graph
         graph.set_xdata(x)
         graph.set_ydata(y)
         plt.xlim(x[0], x[-1])
+        plt.ylim(0,max(y))
 
     anim = FuncAnimation(fig, update, frames = None)
     plt.show()
-
 run()
