@@ -184,8 +184,13 @@ class GUI(QMainWindow):
     def evaluate(self):
         self.test_inputs = self.model_inputs
         AI = NN.NN(self.structure)
-        outputs = AI.run(self.test_inputs, self.trained_weights, self.trained_biases)
-        print(outputs)
+        try:
+            self.trained_weights = AI.w
+            self.trained_biases = AI.b
+            outputs = AI.run(self.test_inputs, self.trained_weights, self.trained_biases)
+            print(outputs)
+        except Exception as e:
+            print(e)
 
 
 app = QApplication(sys.argv)

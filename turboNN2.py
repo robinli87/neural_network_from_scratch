@@ -16,6 +16,8 @@ class NN:
         # self.train_inputs = train_inputs
         # self.train_outputs = train_outputs
         threading.Thread(target=self.monitor).start()
+        self.w = self.build_weights("random")
+        self.b = self.build_biases()
 
     def monitor(self):
         while True:
@@ -136,7 +138,7 @@ class NN:
             file.close()
             print("New_loss: ", new_loss)
 
-        while (new_loss < benchmark) or (new_loss > tolerance):
+        while self.stop != True:
         #for cycles in range(10):
             if new_loss >= benchmark:
                 #we are oscillating, so decrese dw and db
@@ -174,11 +176,7 @@ class NN:
             file.close()
             print("New loss: ", new_loss)
 
-            if self.stop == True:
-                break
             #print("Sample w[0][0] = ", w[1][1])
-
-
         #need backpropagation function
 
         #after training, we want to return the ideal parameters
